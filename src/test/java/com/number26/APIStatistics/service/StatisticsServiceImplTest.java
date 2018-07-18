@@ -1,7 +1,9 @@
 package com.number26.APIStatistics.service;
 
+import com.number26.APIStatistics.manager.BucketManager;
 import com.number26.APIStatistics.model.Response;
 import com.number26.APIStatistics.model.SummarizedTransaction;
+import com.number26.APIStatistics.serviceImpl.StatisticsServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

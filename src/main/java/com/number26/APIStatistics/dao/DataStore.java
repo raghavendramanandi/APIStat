@@ -1,19 +1,11 @@
 package com.number26.APIStatistics.dao;
 
 import com.number26.APIStatistics.model.SummarizedTransaction;
-import com.number26.APIStatistics.service.BucketManager;
-import com.number26.APIStatistics.service.ConfigurationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 @Service

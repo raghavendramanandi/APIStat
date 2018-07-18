@@ -1,4 +1,4 @@
-package com.number26.APIStatistics.service;
+package com.number26.APIStatistics.helper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -9,12 +9,7 @@ public class ConfigurationHelper {
     @Autowired
     private Environment environment;
 
-    public int getNumberOfBBuckets(){
-//        System.out.println(environment.getProperty("numbberOfBuckets"));
-        return Integer.parseInt(environment.getProperty("numberOfBuckets"));
-    }
-
-    public int getTimeInterval(){
+    public int getTimeIntervalInSeconds(){
 //        System.out.println(environment.getProperty("timeInterval"));
         return Integer.parseInt(environment.getProperty("timeInterval"));
     }

@@ -1,13 +1,13 @@
-package com.number26.APIStatistics.service;
+package com.number26.APIStatistics.manager;
 
 import com.number26.APIStatistics.dao.DataStore;
+import com.number26.APIStatistics.helper.ConfigurationHelper;
 import com.number26.APIStatistics.model.SummarizedTransaction;
 import com.number26.APIStatistics.model.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.util.resources.cldr.ii.LocaleNames_ii;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,11 +21,9 @@ public class BucketManager {
     @Autowired
     private ConfigurationHelper configurationHelper;
     private static final Logger logger = LoggerFactory.getLogger(BucketManager.class);
-    int NUMBER_OF_BUCKETS = 60;
-    int TIME_IN_SEC = 60;
 
-    public void addToBucket(Transaction transaction){
-        updateSummary(getSummarizedTransactionIndex(transaction.getTimeStamp()),transaction);
+    public void addToBucket(Transaction transaction, LocalDateTime timeNow){
+        updateSummary(getSummarizedTransactionIndex(transaction.getTimeStamp(), timeNow),transaction);
         DataStore.print();
     }
 
@@ -34,7 +32,7 @@ public class BucketManager {
         for (int i =0; i< DataStore.getReference().length(); i++){
             SummarizedTransaction summarizedTransaction = (SummarizedTransaction) DataStore.getReference().get(i);
             if(summarizedTransaction != null &&
-                    Duration.between(summarizedTransaction.getTime(), timeNow).getSeconds() < configurationHelper.getTimeInterval()){
+                    Duration.between(summarizedTransaction.getTime(), timeNow).getSeconds() < configurationHelper.getTimeIntervalInSeconds()){
                 summarizedTransactions.add(summarizedTransaction);
             }
         }
@@ -47,18 +45,14 @@ public class BucketManager {
                         .getDefault().toZoneId());
 
         SummarizedTransaction summaryFormStore = DataStore.get(summarizedTransactionIndex);
-        if(summaryFormStore == null){
+
+        if (summaryFormStore == null || summaryFormStore.getTime().getMinute() < transactionTime.getMinute()) {
             AddSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime);
+        } else if (summaryFormStore.getTime().getMinute() == transactionTime.getMinute()) {
+            AppendSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime, summaryFormStore);
         } else {
-            if (summaryFormStore.getTime().getMinute() < transactionTime.getMinute()) {
-                AddSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime);
-            } else if (summaryFormStore.getTime().getMinute() == transactionTime.getMinute()) {
-                AppendSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime, summaryFormStore);
-            } else {
-                //Invalid case
-                logger.error("Invalid scenario");
-                return;
-            }
+            //Invalid case
+            logger.error("Invalid scenario");return;
         }
     }
 
@@ -78,12 +72,12 @@ public class BucketManager {
                 transaction.getAmount()));
     }
 
-    private int getSummarizedTransactionIndex(long timeStamp) {
+    private int getSummarizedTransactionIndex(long timeStamp, LocalDateTime timeNow) {
         LocalDateTime time =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(timeStamp), TimeZone
                         .getDefault().toZoneId());
-        int bucketSize = TIME_IN_SEC/NUMBER_OF_BUCKETS;
-        int index = time.getSecond()/bucketSize;
+        int index =(int) Duration.between(time, timeNow).getSeconds();
+//        System.out.println("Index:" + index);
         return index;
     }
 
