@@ -29,48 +29,6 @@ public class BucketManager {
         DataStore.print();
     }
 
-    private void updateSummary(int summarizedTransactionIndex, Transaction transaction) {
-        LocalDateTime transactionTime =
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(transaction.getTimeStamp()), TimeZone
-                        .getDefault().toZoneId());
-
-        SummarizedTransaction summaryFormStore = DataStore.get(summarizedTransactionIndex);
-        if(summaryFormStore == null){
-            DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
-                    1,
-                    transaction.getAmount(),
-                    transaction.getAmount(),
-                    transaction.getAmount()));
-        } else {
-            if (summaryFormStore.getTime().getMinute() < transactionTime.getMinute()) {
-                DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
-                        1,
-                        transaction.getAmount(),
-                        transaction.getAmount(),
-                        transaction.getAmount()));
-            } else if (summaryFormStore.getTime().getMinute() == transactionTime.getMinute()) {
-                DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
-                        (1 + summaryFormStore.getCount()),
-                        (transaction.getAmount() + summaryFormStore.getSum()),
-                        Math.max(transaction.getAmount(), summaryFormStore.getMax()),
-                        Math.min(transaction.getAmount(), summaryFormStore.getMin())));
-            } else {
-                //Invalid case
-                logger.error("Invalid scenario");
-                return;
-            }
-        }
-    }
-
-    private int getSummarizedTransactionIndex(long timeStamp) {
-        LocalDateTime time =
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(timeStamp), TimeZone
-                        .getDefault().toZoneId());
-        int bucketSize = TIME_IN_SEC/NUMBER_OF_BUCKETS;
-        int index = time.getSecond()/bucketSize;
-        return index;
-    }
-
     public List<SummarizedTransaction> getAllStatisticsFor(LocalDateTime timeNow) {
         List<SummarizedTransaction> summarizedTransactions = new ArrayList<>();
         for (int i =0; i< DataStore.getReference().length(); i++){
@@ -82,4 +40,52 @@ public class BucketManager {
         }
         return summarizedTransactions;
     }
+
+    private void updateSummary(int summarizedTransactionIndex, Transaction transaction) {
+        LocalDateTime transactionTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(transaction.getTimeStamp()), TimeZone
+                        .getDefault().toZoneId());
+
+        SummarizedTransaction summaryFormStore = DataStore.get(summarizedTransactionIndex);
+        if(summaryFormStore == null){
+            AddSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime);
+        } else {
+            if (summaryFormStore.getTime().getMinute() < transactionTime.getMinute()) {
+                AddSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime);
+            } else if (summaryFormStore.getTime().getMinute() == transactionTime.getMinute()) {
+                AppendSummarizedTransactionAtIndex(summarizedTransactionIndex, transaction, transactionTime, summaryFormStore);
+            } else {
+                //Invalid case
+                logger.error("Invalid scenario");
+                return;
+            }
+        }
+    }
+
+    private void AppendSummarizedTransactionAtIndex(int summarizedTransactionIndex, Transaction transaction, LocalDateTime transactionTime, SummarizedTransaction summaryFormStore) {
+        DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
+                (1 + summaryFormStore.getCount()),
+                (transaction.getAmount() + summaryFormStore.getSum()),
+                Math.max(transaction.getAmount(), summaryFormStore.getMax()),
+                Math.min(transaction.getAmount(), summaryFormStore.getMin())));
+    }
+
+    private void AddSummarizedTransactionAtIndex(int summarizedTransactionIndex, Transaction transaction, LocalDateTime transactionTime) {
+        DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
+                1,
+                transaction.getAmount(),
+                transaction.getAmount(),
+                transaction.getAmount()));
+    }
+
+    private int getSummarizedTransactionIndex(long timeStamp) {
+        LocalDateTime time =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(timeStamp), TimeZone
+                        .getDefault().toZoneId());
+        int bucketSize = TIME_IN_SEC/NUMBER_OF_BUCKETS;
+        int index = time.getSecond()/bucketSize;
+        return index;
+    }
+
+
 }
