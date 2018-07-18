@@ -41,19 +41,19 @@ public class DataStore {
     public static void print() {
         for (int i = 0; i< summarizedTransactions.length(); i++){
             if(summarizedTransactions.get(i) != null) {
-                System.out.println("Index:" + i);
-                System.out.println(summarizedTransactions.get(i));
+                logger.info("Index:" + i);
+                logger.info(((SummarizedTransaction)summarizedTransactions.get(i)).toString());
             }
         }
     }
 
-    public static SummarizedTransaction get(int summarizedTransactionIndex) {
+    synchronized public static SummarizedTransaction get(int summarizedTransactionIndex) {
         if(summarizedTransactions.get(summarizedTransactionIndex)!= null)
             return (SummarizedTransaction) summarizedTransactions.get(summarizedTransactionIndex);
         return null;
     }
 
-    public static void add(int summarizedTransactionIndex, SummarizedTransaction summarizedTransaction) {
+    synchronized public static void add(int summarizedTransactionIndex, SummarizedTransaction summarizedTransaction) {
         summarizedTransactions.set(summarizedTransactionIndex, summarizedTransaction);
     }
 }

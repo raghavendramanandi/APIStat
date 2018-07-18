@@ -1,23 +1,17 @@
 package com.number26.APIStatistics.service;
 
 import com.number26.APIStatistics.enums.Status;
-import com.number26.APIStatistics.model.Response;
 import com.number26.APIStatistics.model.Transaction;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-
-import static java.lang.Double.NaN;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionServiceImplTest {

@@ -31,4 +31,11 @@ public class Transaction {
                         .getDefault().toZoneId());
         return !(Duration.between(dateTime, localDateTime).getSeconds() > windowInSeconds);
     }
+
+    public boolean isTransactionInFuture(LocalDateTime timeNow) {
+        LocalDateTime dateTime =
+                LocalDateTime.ofInstant(Instant.ofEpochMilli(this.getTimeStamp()), TimeZone
+                        .getDefault().toZoneId());
+        return dateTime.isBefore(timeNow);
+    }
 }
