@@ -10,7 +10,12 @@ public class ConfigurationHelper {
     private Environment environment;
 
     public int getNumberOfBBuckets(){
-//        System.out.println(environment.getProperty("numbberOfbuckets"));
-        return Integer.parseInt(environment.getProperty("numbberOfbuckets"));
+//        System.out.println(environment.getProperty("numbberOfBuckets"));
+        return Integer.parseInt(environment.getProperty("numberOfBuckets"));
+    }
+
+    public int getTimeInterval(){
+//        System.out.println(environment.getProperty("timeInterval"));
+        return Integer.parseInt(environment.getProperty("timeInterval"));
     }
 }

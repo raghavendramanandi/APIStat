@@ -1,7 +1,8 @@
 package com.number26.APIStatistics.controller;
 
 import com.number26.APIStatistics.model.Transaction;
-import com.number26.APIStatistics.service.Statistics;
+import com.number26.APIStatistics.service.StatisticsService;
+import com.number26.APIStatistics.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class TransactionController {
 
     @Autowired
-    public Statistics statistics;
-
+    public TransactionService transactionService;
 
     @RequestMapping("/")
     public String healthCheck() {
@@ -21,7 +21,7 @@ public class TransactionController {
     @PostMapping("/transaction")
     public String addTransaction(@RequestBody Transaction transaction) {
         System.out.println("Here");
-        System.out.println(statistics.processTransaction(transaction));
+        System.out.println(transactionService.processTransaction(transaction));
         return transaction.getAmount() + " " + transaction.getTimeStamp();
     }
 }

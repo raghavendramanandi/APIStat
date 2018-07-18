@@ -37,7 +37,6 @@ public class BucketManager {
         SummarizedTransaction summaryFormStore = DataStore.get(summarizedTransactionIndex);
         if(summaryFormStore == null){
             DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
-                    transaction.getAmount(),
                     1,
                     transaction.getAmount(),
                     transaction.getAmount(),
@@ -45,14 +44,12 @@ public class BucketManager {
         } else {
             if (summaryFormStore.getTime().getMinute() < transactionTime.getMinute()) {
                 DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
-                        transaction.getAmount(),
                         1,
                         transaction.getAmount(),
                         transaction.getAmount(),
                         transaction.getAmount()));
             } else if (summaryFormStore.getTime().getMinute() == transactionTime.getMinute()) {
                 DataStore.add(summarizedTransactionIndex, new SummarizedTransaction(transactionTime,
-                        getAverage(transaction.getAmount(), summaryFormStore.getAvg(), summaryFormStore.getCount()),
                         (1 + summaryFormStore.getCount()),
                         (transaction.getAmount() + summaryFormStore.getSum()),
                         Math.max(transaction.getAmount(), summaryFormStore.getMax()),
@@ -63,10 +60,6 @@ public class BucketManager {
                 return;
             }
         }
-    }
-
-    public double getAverage(double amount, double avg, int count) {
-        return ((avg*count)+amount)/(count+1);
     }
 
     private int getSummarizedTransactionIndex(long timeStamp) {
@@ -83,7 +76,7 @@ public class BucketManager {
         for (int i =0; i< DataStore.getReference().length(); i++){
             SummarizedTransaction summarizedTransaction = (SummarizedTransaction) DataStore.getReference().get(i);
             if(summarizedTransaction != null &&
-                    Duration.between(summarizedTransaction.getTime(),timeNow).getSeconds() > configurationHelper.getNumberOfBBuckets()){ //TODO condition evaluation
+                    Duration.between(summarizedTransaction.getTime(), timeNow).getSeconds() < configurationHelper.getTimeInterval()){
                 summarizedTransactions.add(summarizedTransaction);
             }
         }

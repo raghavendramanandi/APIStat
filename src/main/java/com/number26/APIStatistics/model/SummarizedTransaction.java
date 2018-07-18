@@ -4,15 +4,13 @@ import java.time.LocalDateTime;
 
 public class SummarizedTransaction {
     private LocalDateTime time;
-    private double avg;
     private int count;
     private double sum;
     private double max;
     private double min;
 
-    public SummarizedTransaction(LocalDateTime time, double avg, int count, double sum, double max, double min) {
+    public SummarizedTransaction(LocalDateTime time, int count, double sum, double max, double min) {
         this.time = time;
-        this.avg = avg;
         this.count = count;
         this.sum = sum;
         this.max = max;
@@ -21,10 +19,6 @@ public class SummarizedTransaction {
 
     public LocalDateTime getTime() {
         return time;
-    }
-
-    public double getAvg() {
-        return avg;
     }
 
     public int getCount() {
@@ -47,7 +41,6 @@ public class SummarizedTransaction {
     public String toString() {
         return "SummarizedTransaction{" +
                 "time=" + time +
-                ", avg=" + avg +
                 ", count=" + count +
                 ", sum=" + sum +
                 ", max=" + max +

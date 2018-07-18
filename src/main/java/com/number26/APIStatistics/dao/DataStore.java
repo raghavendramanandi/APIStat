@@ -40,8 +40,10 @@ public class DataStore {
 
     public static void print() {
         for (int i = 0; i< summarizedTransactions.length(); i++){
-            System.out.println("Index:" + i);
-            System.out.println(summarizedTransactions.get(i));
+            if(summarizedTransactions.get(i) != null) {
+                System.out.println("Index:" + i);
+                System.out.println(summarizedTransactions.get(i));
+            }
         }
     }
 
