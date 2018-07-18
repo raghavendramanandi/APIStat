@@ -31,7 +31,6 @@ public class TransactionServiceImplTest {
     @Test
     public void shouldReturnInvalidIfTransactionTimeIsOld(){
         Transaction transaction = new Transaction(1.0, 1431883849634L);
-        doNothing().when(bucketManager).addToBucket(any(Transaction.class));
         Status actual = transactionService.processTransaction(transaction);
         assertEquals(actual, Status.INVALID);
     }
@@ -39,7 +38,6 @@ public class TransactionServiceImplTest {
     @Test
     public void shouldReturnInvalidIfTransactionTimeIsAheadOfTime(){
         Transaction transaction = new Transaction(1.0, 9431883849634L);
-        doNothing().when(bucketManager).addToBucket(any(Transaction.class));
         Status actual = transactionService.processTransaction(transaction);
         assertEquals(actual, Status.INVALID);
     }

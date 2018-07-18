@@ -1,4 +1,4 @@
-package com.number26.APIStatistics;
+package com.number26.APIStatistics.model;
 
 import com.number26.APIStatistics.model.Transaction;
 import org.hamcrest.collection.IsIn;
