@@ -10,7 +10,6 @@ public class ConfigurationHelper {
     private Environment environment;
 
     public int getTimeIntervalInSeconds(){
-//        System.out.println(environment.getProperty("timeInterval"));
         return Integer.parseInt(environment.getProperty("timeInterval"));
     }
 }

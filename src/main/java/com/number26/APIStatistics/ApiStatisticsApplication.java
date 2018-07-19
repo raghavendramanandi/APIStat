@@ -12,6 +12,6 @@ public class ApiStatisticsApplication {
 		ConfigurableApplicationContext ctx =
 			SpringApplication.run(ApiStatisticsApplication.class, args);
 		String numberOfBuckets = ctx.getEnvironment().getProperty("numberOfBuckets");
-		DataStore.InitializeStore(Integer.parseInt(numberOfBuckets));
+		DataStore.initializeStore(Integer.parseInt(numberOfBuckets));
 	}
 }

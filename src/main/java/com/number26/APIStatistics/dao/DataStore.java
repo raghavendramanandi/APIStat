@@ -25,9 +25,14 @@ public class DataStore {
         return summarizedTransactions;
     }
 
-    public static void InitializeStore(int size){
+    public static void initializeStore(int size){
         if(summarizedTransactions == null)
             summarizedTransactions = new AtomicReferenceArray(size);
+    }
+
+    //For use only in test
+    public static void resetStore(int size){
+        summarizedTransactions = new AtomicReferenceArray(size);
     }
 
     public static void print() {

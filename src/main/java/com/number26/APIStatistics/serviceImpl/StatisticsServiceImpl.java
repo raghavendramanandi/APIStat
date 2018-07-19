@@ -1,5 +1,6 @@
 package com.number26.APIStatistics.serviceImpl;
 
+import com.number26.APIStatistics.manager.Manager;
 import com.number26.APIStatistics.model.SummarizedTransaction;
 import com.number26.APIStatistics.model.Response;
 import com.number26.APIStatistics.manager.BucketManager;
@@ -14,7 +15,7 @@ import java.util.List;
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
     @Autowired
-    private BucketManager bucketManager;
+    private Manager bucketManager;
     private static final Logger logger = LoggerFactory.getLogger(BucketManager.class);
 
     public Response getStatistics(){

@@ -2,6 +2,7 @@ package com.number26.APIStatistics.serviceImpl;
 
 import com.number26.APIStatistics.enums.Status;
 import com.number26.APIStatistics.helper.Util;
+import com.number26.APIStatistics.manager.Manager;
 import com.number26.APIStatistics.model.Transaction;
 import com.number26.APIStatistics.manager.BucketManager;
 import com.number26.APIStatistics.helper.ConfigurationHelper;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Service
 public class TransactionServiceImpl implements TransactionService {
     @Autowired
-    private BucketManager bucketManager;
+    private Manager bucketManager;
     @Autowired
     private ConfigurationHelper configurationHelper;
     @Autowired
@@ -28,7 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
         try {
             if (!validateTransaction(transaction, timeNow))
                 return Status.INVALID;
-            consumeTransaction(transaction, timeNow);
+            consumeTransaction(transaction);
             return Status.SUCCESS;
         }catch (Exception e){
             logger.error(e.getMessage());
@@ -36,8 +37,8 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private void consumeTransaction(Transaction transaction, LocalDateTime timeNow) {
-        bucketManager.addToBucket(transaction, timeNow);
+    private void consumeTransaction(Transaction transaction) {
+        bucketManager.addToBucket(transaction);
     }
 
     public boolean validateTransaction(Transaction transaction, LocalDateTime timeNow) {

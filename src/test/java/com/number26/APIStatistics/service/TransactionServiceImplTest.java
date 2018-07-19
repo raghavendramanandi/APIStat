@@ -42,7 +42,7 @@ public class TransactionServiceImplTest {
         when(configurationHelper.getTimeIntervalInSeconds()).thenReturn(60);
         when(util.now()).thenReturn(LocalDateTime.now());
         Status actual = transactionService.processTransaction(transaction);
-        assertEquals(actual, Status.INVALID);
+        assertEquals(Status.INVALID, actual);
     }
 
     @Test
@@ -51,16 +51,16 @@ public class TransactionServiceImplTest {
         when(configurationHelper.getTimeIntervalInSeconds()).thenReturn(60);
         when(util.now()).thenReturn(LocalDateTime.now());
         Status actual = transactionService.processTransaction(transaction);
-        assertEquals(actual, Status.INVALID);
+        assertEquals(Status.INVALID, actual);
     }
 
     @Test
     public void shouldReturnSuccessOnAValidTransaction(){
-        long timeStamp = LocalDateTime.now().toInstant(ZoneOffset.ofTotalSeconds(19800)).toEpochMilli();
+        long timeStamp = LocalDateTime.now().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli();
         Transaction transaction = new Transaction(1.0, timeStamp);
         doReturn(true).when(transactionService).validateTransaction(any(),any());
-        doNothing().when(bucketManager).addToBucket(any(), any());
+        doNothing().when(bucketManager).addToBucket(any());
         Status actual = transactionService.processTransaction(transaction);
-        assertEquals(actual, Status.SUCCESS);
+        assertEquals(Status.SUCCESS, actual);
     }
 }

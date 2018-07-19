@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Service
-public class BucketManager {
+public class BucketManager implements Manager {
     @Autowired
     private ConfigurationHelper configurationHelper;
     private static final Logger logger = LoggerFactory.getLogger(BucketManager.class);
 
-    public void addToBucket(Transaction transaction, LocalDateTime timeNow){
-        updateSummary(getSummarizedTransactionIndex(transaction.getTimeStamp(), timeNow),transaction);
+    public void addToBucket(Transaction transaction){
+        updateSummary(getSummarizedTransactionIndex(transaction.getTimeStamp()),transaction);
         DataStore.print();
     }
 
@@ -72,14 +72,11 @@ public class BucketManager {
                 transaction.getAmount()));
     }
 
-    private int getSummarizedTransactionIndex(long timeStamp, LocalDateTime timeNow) {
+    private int getSummarizedTransactionIndex(long timeStamp) {
         LocalDateTime time =
                 LocalDateTime.ofInstant(Instant.ofEpochMilli(timeStamp), TimeZone
                         .getDefault().toZoneId());
-        int index =(int) Duration.between(time, timeNow).getSeconds();
-//        System.out.println("Index:" + index);
+        int index = time.getSecond();
         return index;
     }
-
-
 }
