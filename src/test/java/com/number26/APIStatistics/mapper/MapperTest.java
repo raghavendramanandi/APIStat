@@ -21,7 +21,7 @@ public class MapperTest {
 
     @Test
     public void shouldReturn500IfInvalid(){
-        assertEquals(new ResponseEntity<Void>(HttpStatus.BAD_REQUEST), Mapper.responseMapper(Status.FAILLED));
+        assertEquals(new ResponseEntity<Void>(HttpStatus.BAD_REQUEST), Mapper.responseMapper(Status.FAILED));
     }
 
 }

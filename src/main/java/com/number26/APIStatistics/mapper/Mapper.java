@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 public class Mapper {
     public static ResponseEntity<Void> responseMapper(Status status){
         switch (status){
-            case FAILLED:
+            case FAILED:
                 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
             case INVALID:
                 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
