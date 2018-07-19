@@ -1,5 +1,8 @@
 package com.number26.APIStatistics.model;
 
+import com.number26.APIStatistics.helper.Util;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;

@@ -1,7 +1,9 @@
 package com.number26.APIStatistics.service;
 
+import com.number26.APIStatistics.manager.BucketManager;
 import com.number26.APIStatistics.model.Response;
 import com.number26.APIStatistics.model.SummarizedTransaction;
+import com.number26.APIStatistics.serviceImpl.StatisticsServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -63,10 +65,10 @@ public class StatisticsServiceImplTest {
     }
 
     private void assertResponse(Response actual, Response expected) {
-        assertEquals(actual.getCount(), expected.getCount());
-        assertEquals(actual.getSum(), expected.getSum(), 0.0);
-        assertEquals(actual.getAvg(), expected.getAvg(), 0.0);
-        assertEquals(actual.getMin(), expected.getMin(), 0.0);
-        assertEquals(actual.getMax(), expected.getMax(), 0.0);
+        assertEquals(expected.getCount(), actual.getCount());
+        assertEquals(expected.getSum(), actual.getSum(), 0.0);
+        assertEquals(expected.getAvg(), actual.getAvg(), 0.0);
+        assertEquals(expected.getMin(), actual.getMin(), 0.0);
+        assertEquals(expected.getMax(), actual.getMax(), 0.0);
     }
 }

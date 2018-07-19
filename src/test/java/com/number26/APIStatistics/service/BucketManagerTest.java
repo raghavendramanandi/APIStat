@@ -1,6 +1,8 @@
 package com.number26.APIStatistics.service;
 
 import com.number26.APIStatistics.dao.DataStore;
+import com.number26.APIStatistics.helper.ConfigurationHelper;
+import com.number26.APIStatistics.manager.BucketManager;
 import com.number26.APIStatistics.model.SummarizedTransaction;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,7 +28,7 @@ public class BucketManagerTest {
 
     @Before
     public void runBefore(){
-        DataStore.InitializeStore(60);
+        DataStore.resetStore(60);
         DataStore.add(1, new SummarizedTransaction(LocalDateTime.of(2018,7,14,9,0,1),1,2,2, 2));
         DataStore.add(11, new SummarizedTransaction(LocalDateTime.of(2018,7,14,9,1,11),2,2,1, 1));
         DataStore.add(21, new SummarizedTransaction(LocalDateTime.of(2018,7,14,9,1,21),4,8,4, 1));
@@ -38,8 +39,9 @@ public class BucketManagerTest {
 
     @Test
     public void shouldReturnValidSummarizedTransaction() {
-        when(configurationHelper.getTimeInterval()).thenReturn(60);
+
+        when(configurationHelper.getTimeIntervalInSeconds()).thenReturn(60);
         int count = (bucketManager.getAllStatisticsFor(LocalDateTime.of(2018,7,14,9,5,52))).size();
-        assertEquals(count, 2);
+        assertEquals(2, count);
     }
 }
